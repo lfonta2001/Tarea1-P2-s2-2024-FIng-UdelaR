@@ -78,7 +78,6 @@ void liberarTGrupo(TGrupo& grupo){
     for (int i = 0; i < grupo->tope; i++) {
         liberarTPersona(grupo->personas[i]);
     }
-    // esto es una prueba para ver que pasa
     delete grupo;
     grupo = NULL;
     /****** Fin de parte Parte 5.2 *****/
