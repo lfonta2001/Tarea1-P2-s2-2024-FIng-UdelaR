@@ -25,29 +25,34 @@ TGrupo crearTGrupo(){
 void agregarAGrupo(TGrupo& grupo, TPersona persona){
     /************ Parte 5.2 ************/
     /*Escriba el código a continuación */
-    if (grupo->tope < MAX_PERSONAS - 1) {
+    if (grupo->tope < MAX_PERSONAS) {
         int i = 0;
         int igualdad;
         bool agregado = false;
         TPersona temp1, temp2;
-        TFecha fecha1, fecha2; 
-        while (i < grupo->tope && !agregado) {
-            fecha1 = fechaNacimientoTPersona(grupo->personas[i]);
-            fecha2 = fechaNacimientoTPersona(persona);
-            igualdad = compararTFechas(fecha1, fecha2);
-            if( igualdad == 1) {
-                i++;
-            } else {
-                grupo->tope++;
-                temp1 = grupo->personas[i];
-                grupo->personas[i] = persona;
-                int j = i + 1;
-                while (j < grupo->tope) {
-                    temp2 = grupo->personas[j];
-                    grupo->personas[j] = temp1;
-                    temp1 = temp2;
+        TFecha fecha1, fecha2;
+        if (grupo->tope == 0) {
+            grupo->personas[0] = persona;
+            grupo->tope = 1;
+        } else {
+            while (i < grupo->tope && !agregado) {
+                fecha1 = fechaNacimientoTPersona(grupo->personas[i]);
+                fecha2 = fechaNacimientoTPersona(persona);
+                igualdad = compararTFechas(fecha1, fecha2);
+                if( igualdad == 1) {
+                    i++;
+                } else {
+                    grupo->tope == grupo->tope + 1;
+                    temp1 = grupo->personas[i];
+                    grupo->personas[i] = persona;
+                    int j = i + 1;
+                    while (j <= grupo->tope) { // error loop infinito, al agregar segunda persona buggea
+                        temp2 = grupo->personas[j];
+                        grupo->personas[j] = temp1;
+                        temp1 = temp2;
+                    }
+                    agregado = true;
                 }
-                agregado = true;
             }
         }
     }
@@ -61,7 +66,7 @@ void agregarAGrupo(TGrupo& grupo, TPersona persona){
 void imprimirTGrupo(TGrupo grupo){
     /************ Parte 5.2 ************/
     /*Escriba el código a continuación */
-    if (grupo->tope != 0) {
+    if (grupo->tope > 0) {
         for (int i = 0; i < grupo->tope; i++) {
             imprimirTPersona(grupo->personas[i]);
         }
