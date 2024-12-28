@@ -1,5 +1,5 @@
-.ignore // archivos ignore del makefile
-*.exe   // archivos de ejecucion
-*.o     // archivos objetos
-*.sal   // archivos de salida
-*.diff  // archivos de diferencia
+.ignore
+*.exe
+*.o
+*.sal
+*.diff
