@@ -50,12 +50,12 @@ void liberarTPersona(TPersona &persona){
 
 // Función que retorna la cédula de la persona
 int cedulaTPersona(TPersona persona){
-    int cedula = 0;
+    int cedula1 = 0;
 	/************ Parte 4.4 ************/
     /*Escriba el código a continuación */
-    cedula = persona->cedula;
+    cedula1 = persona->cedula;
     /****** Fin de parte Parte 4.4 *****/
-	return cedula;
+	return cedula1;
 }
 
 // Función que retorna la fecha de nacimiento de la persona

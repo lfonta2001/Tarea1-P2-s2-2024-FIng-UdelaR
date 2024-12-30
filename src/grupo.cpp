@@ -10,7 +10,6 @@ TGrupo crearTGrupo(){
     TGrupo grupo = NULL;
     /************ Parte 5.2 ************/
     /*Escriba el código a continuación */
-
     grupo = new rep_grupo;
     grupo->personas[0] = NULL;
     grupo->tope = 0;
@@ -25,31 +24,36 @@ TGrupo crearTGrupo(){
 void agregarAGrupo(TGrupo& grupo, TPersona persona){
     /************ Parte 5.2 ************/
     /*Escriba el código a continuación */
-    if (grupo->tope < MAX_PERSONAS) {
+    if (grupo->tope < MAX_PERSONAS - 1 && !estaEnGrupo(grupo, cedulaTPersona(persona))) {
         int i = 0;
         int igualdad;
         bool agregado = false;
-        TPersona temp1, temp2;
-        TFecha fecha1, fecha2;
-        if (grupo->tope == 0) {
+        TFecha fechaNuevo, fechaGrupo;
+        grupo->tope++;
+        if (grupo->tope == 1) {
             grupo->personas[0] = persona;
-            grupo->tope = 1;
         } else {
-            while (i < grupo->tope && !agregado) {
-                fecha1 = fechaNacimientoTPersona(grupo->personas[i]);
-                fecha2 = fechaNacimientoTPersona(persona);
-                igualdad = compararTFechas(fecha1, fecha2);
+            while (i < (grupo->tope) && !agregado) {
+                TPersona temp1, temp2;
+                if (i != (grupo->tope - 1)) {
+                    fechaGrupo = fechaNacimientoTPersona(grupo->personas[i]);
+                    fechaNuevo = fechaNacimientoTPersona(persona);
+                    igualdad = compararTFechas(fechaNuevo, fechaGrupo);
+                } else {
+                    igualdad = 0;
+                }
+
                 if( igualdad == 1) {
                     i++;
                 } else {
-                    grupo->tope == grupo->tope + 1;
                     temp1 = grupo->personas[i];
                     grupo->personas[i] = persona;
                     int j = i + 1;
-                    while (j <= grupo->tope) { // error loop infinito, al agregar segunda persona buggea
+                    while (j < grupo->tope) {
                         temp2 = grupo->personas[j];
                         grupo->personas[j] = temp1;
                         temp1 = temp2;
+                        j++;
                     }
                     agregado = true;
                 }
@@ -113,9 +117,12 @@ void removerDeGrupo(TGrupo &grupo, int cedula){
         int i, ind;
         bool encontrado = false;
         for (i = 0; i < grupo->tope && !encontrado; i++) {
-            encontrado = (cedulaTPersona(grupo->personas[i]), cedula);
-            ind = i - 1;
+            int cedula1 = cedulaTPersona(grupo->personas[i]);
+            encontrado = (cedula1 == cedula);
+            ind = i;
         }
+
+        liberarTPersona(grupo->personas[ind]);
 
         for (i = ind; i < grupo->tope - 1; i++) {
             grupo->personas[i] = grupo->personas[i + 1];
@@ -145,24 +152,26 @@ void imprimirPersonasFecha(TGrupo grupo, TFecha fecha){
     /************ Parte 5.5 ************/
     /*Escriba el código a continuación */
     if (hayPersonasFecha(grupo, fecha)) {
-        int ind;
-        TFecha fecha1, fecha2;
+        int i = 0;
+        TFecha fecha1;
+        bool terminar = false;
         bool encontrado = false;
-        for (int i = 0; i < grupo->tope && !encontrado; i++) {
+
+        do {
             fecha1 = fechaNacimientoTPersona(grupo->personas[i]);
             encontrado = (compararTFechas(fecha1, fecha) == 0);
-            ind = i - 1;
-        }
+            i++;
+        } while (i < grupo->tope && !encontrado);
 
-        do
-        {
-            fecha2 = fechaNacimientoTPersona(grupo->personas[ind]);
-            imprimirTPersona(grupo->personas[ind]);
-            ind++;
-        } while (ind < grupo->tope && compararTFechas(fecha2, fecha) == 0);
-        
-    } else {
-        printf("NO SE ENCONTRARON PERSONAS.\n");
+        i--;
+        do {
+            imprimirTPersona(grupo->personas[i]);
+            i++;
+            if (i < grupo->tope) {
+                fecha1 = fechaNacimientoTPersona(grupo->personas[i]);
+                terminar = compararTFechas(fecha1, fecha) != 0;
+            }
+        } while (i < grupo->tope && !terminar);
     }
     /****** Fin de parte Parte 5.5 *****/ 
 }
